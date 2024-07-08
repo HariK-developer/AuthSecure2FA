@@ -23,44 +23,62 @@
         <img class="absolute top-20 left-60" src="assets/images/right_msg.png" alt="Example Image" height="100"
           width="100" />
       </div>
-      <p class="absolute bottom-10  text-darkPeach text-xl font-bold">Turn your ideas into reality</p>
+      <p class="absolute bottom-10 text-darkPeach text-xl font-bold">
+        Turn your ideas into reality
+      </p>
     </div>
     <div class="basis-2/5">
-      <!-- <sign-up></sign-up> -->
-      <div class="flex flex-col h-full">
-        <div class="h-4/5 flex flex-col justify-center items-center ">
-          <img class="mb-2 mt-2" src="assets/images/4dots.png" alt="Example Image" height="50" width="50" />
-          <p class="text-CustomGray text-xl font-bold">Login to your Account</p>
-          <p class="mr-5 text-CustomGray text-xs">See what is going on your business</p>
-          <form>
-
-            <label for="helper-text" class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Email</label>
-            <input type="email" id="helper" aria-describedby="helper-text-explanation"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="name@flow.com" required>
-              <label for="helper" class="block mb-2  mt-5  text-sm font-medium text-gray-900 dark:text-CustomGray">Password</label>
+      <ng-container *ngIf="isLogin$ | async; else signUpTemplate">
+        <div class="flex flex-col h-full">
+          <div class="h-4/5 flex flex-col justify-center items-center">
+            <img class="mb-2 mt-2" src="assets/images/4dots.png" alt="Example Image" height="50" width="50" />
+            <p class="text-CustomGray text-xl font-bold">
+              Login to your Account
+            </p>
+            <p class="mr-5 text-CustomGray text-xs">
+              See what is going on your business
+            </p>
+            <form>
+              <label for="helper-text"
+                class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Username</label>
+              <input type="text" id="helper" aria-describedby="helper-text-explanation"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="name" required />
+              <label for="helper"
+                class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Password</label>
               <input type="password" id="helper-text" aria-describedby="helper-text-explanation"
-                class="mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="•••••••••" required>
-            <div class="flex items-start mb-6">
-              <div class="flex items-center h-5">
-                <input id="remember" type="checkbox" value=""
-                  class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                  required />
+                class="mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="•••••••••" required />
+              <div class="flex items-start mb-6">
+                <div class="flex items-center h-5">
+                  <input id="remember" type="checkbox" value=""
+                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                    required />
+                </div>
+                <label for="remember" class="ms-2 text-xs font-medium text-gray-900 dark:text-gray-300">Remember me
+                  <a href="#" class="text-blue-600 hover:underline dark:text-darkPeach text-xs ml-20">Forgot
+                    password?</a>.</label>
               </div>
-              <label for="remember" class="ms-2 text-xs font-medium text-gray-900 dark:text-gray-300">Remember me
-                <a href="#" class="text-blue-600 hover:underline dark:text-darkPeach text-xs ml-20">Forgot
-                  password?</a>.</label>
-            </div>
-            <button type="submit"
-              class="text-white bg-darkPeach focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-32 py-2.5 text-center dark:bg-darkPeach-600">Login</button>
-          </form>
+              <button type="submit"
+                class="text-white bg-darkPeach focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-32 py-2.5 text-center dark:bg-darkPeach-600">
+                Login
+              </button>
+            </form>
+          </div>
+          <div class="h-1/5 flex justify-center items-center">
+            <p class="text-xs">
+              Not Registered Yet?
+              <a href="#" (click)="toggleForm()">
+                <span class="text-darkPeach">Create an account</span>
+              </a>
+            </p>
+          </div>
         </div>
-        <div class="h-1/5 flex justify-center items-center ">
-          <p class="text-xs">Not Registered Yet? <span class="text-darkPeach">Create an account</span></p>
-        </div>
-      </div>
-
+      </ng-container>
     </div>
+    <ng-template #signUpTemplate>
+      <sign-up></sign-up>
+      
+    </ng-template>
   </div>
 </div>

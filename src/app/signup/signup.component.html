@@ -1,1 +1,41 @@
-<p>signup works!</p>
+<div class="flex flex-col h-full">
+    <div class="h-4/5 flex flex-col justify-center items-center">
+        <img class="mb-2 mt-2" src="assets/images/4dots.png" alt="Example Image" height="50" width="50" />
+        <p class="text-CustomGray text-xl font-bold">Create your Account</p>
+        <p class="text-CustomGray text-xs">See what is going on your business</p>
+        <form [formGroup]="applyForm" (submit)="Signup()">
+            <div>
+                <label for="username"
+                    class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Username</label>
+                <input type="text" formControlName="username" id="username" aria-describedby="helper-text-explanation"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="name" (input)="onUsernameInput($event)" required />
+                <div *ngIf="username?.invalid && username?.touched" class="error">
+                    Username is required
+                </div>
+            </div>
+            <div>
+                <label for="password"
+                    class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Password</label>
+                <input type="password" formControlName="password" id="password"
+                    aria-describedby="helper-text-explanation"
+                    class="mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="•••••••••" required />
+                <div *ngIf="password?.invalid && password?.touched" class="error">
+                    Password is required
+                </div>
+                
+            </div>
+            <button type="submit"
+                class="text-white bg-darkPeach focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-32 py-2.5 text-center dark:bg-darkPeach-600">
+                Signup
+            </button>
+        </form>
+    </div>
+    <div class="h-1/5 flex justify-center items-center">
+        <p class="text-xs">
+            Already have an account?
+            <a href="#" (click)="toggleForm()"><span class="text-darkPeach">Login</span></a>
+        </p>
+    </div>
+</div>
