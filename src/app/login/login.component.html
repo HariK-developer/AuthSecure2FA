@@ -1,4 +1,4 @@
-<div class="flex items-center justify-center h-screen">
+<div [ngClass]="{'blur-sm': qrCodeUrl}" class="flex items-center justify-center h-screen">
   <div class="flex flex-row h-5/6 w-11/12 bg-white rounded-3xl">
     <div
       class="basis-3/5 bg-peach ml-1.5 mt-1.5 mb-1.5 rounded-tl-3xl rounded-bl-3xl flex items-center justify-center relative">
@@ -38,26 +38,35 @@
             <p class="mr-5 text-CustomGray text-xs">
               See what is going on your business
             </p>
-            <form>
-              <label for="helper-text"
-                class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Username</label>
-              <input type="text" id="helper" aria-describedby="helper-text-explanation"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="name" required />
-              <label for="helper"
-                class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Password</label>
-              <input type="password" id="helper-text" aria-describedby="helper-text-explanation"
-                class="mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="•••••••••" required />
-              <div class="flex items-start mb-6">
-                <div class="flex items-center h-5">
-                  <input id="remember" type="checkbox" value=""
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                    required />
+            <form [formGroup]="applyForm" (submit)="Login()">
+              <div>
+                <label for="username"
+                  class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Username</label>
+                <input type="text" id="username" formControlName="username" aria-describedby="helper-text-explanation"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="name" (input)="onUsernameInput($event)" required />
+                <div *ngIf="showValidationMessage && username?.invalid && username?.touched" class="error">
+                  Username is required
                 </div>
-                <label for="remember" class="ms-2 text-xs font-medium text-gray-900 dark:text-gray-300">Remember me
-                  <a href="#" class="text-blue-600 hover:underline dark:text-darkPeach text-xs ml-20">Forgot
-                    password?</a>.</label>
+              </div>
+              <div>
+                <label for="password"
+                  class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">Password</label>
+                <input type="password" id="password" formControlName="password"
+                  aria-describedby="helper-text-explanation"
+                  class="mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="•••••••••" required />
+                <div *ngIf="showValidationMessage && password?.invalid && password?.touched" class="error">
+                  Password is required
+                </div>
+              </div>
+              <div *ngIf="otpRequired">
+                <label for="otp"
+                  class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-CustomGray">OTP</label>
+                <input type="text" id="otp" formControlName="otp"
+                  aria-describedby="helper-text-explanation"
+                  class="mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-CustomGray dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
               </div>
               <button type="submit"
                 class="text-white bg-darkPeach focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-32 py-2.5 text-center dark:bg-darkPeach-600">
@@ -78,7 +87,11 @@
     </div>
     <ng-template #signUpTemplate>
       <sign-up></sign-up>
-      
+
     </ng-template>
   </div>
+</div>
+
+<div *ngIf="qrCodeUrl" class="absolute inset-0 flex items-center justify-center">
+  <img [src]="qrCodeUrl" alt="Qr Image" class="h-96 w-96  bg-gray-300 rounded-lg shadow dark:border-gray-700"><img>
 </div>

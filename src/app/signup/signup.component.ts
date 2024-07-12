@@ -10,6 +10,9 @@ import { ApiService } from '../services/api.service';
 import { Login } from '../interface/login';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { NotificationService } from '../services/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { HandleErrorService } from '../services/handle-error.service';
 
 @Component({
   selector: 'sign-up',
@@ -20,6 +23,7 @@ import { Observable } from 'rxjs';
 })
 export class SignupComponent {
   passwordVisible$: Observable<boolean>;
+  showValidationMessage = false;
 
   applyForm = new FormGroup({
     username: new FormControl('', [
@@ -37,7 +41,9 @@ export class SignupComponent {
 
   constructor(
     private loginService: LoginService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private notificationService: NotificationService,
+    private errorService: HandleErrorService
   ) {
     this.passwordVisible$ = this.loginService.passwordVisible$;
   }
@@ -67,7 +73,11 @@ export class SignupComponent {
     if (this.applyForm.invalid) {
       // Display validation errors
       this.applyForm.markAllAsTouched();
-      return;
+      this.showValidationMessage = true;
+      setTimeout(() => {
+        this.showValidationMessage = false;
+      }, 3000);
+      return; 
     }
 
     // Bind form data to the `data` object before making the API call
@@ -76,14 +86,16 @@ export class SignupComponent {
 
     this.apiService.signup(this.data).subscribe({
       next: (response) => {
-        console.log('Success:', response);
+        this.notificationService.showNotification('Signup successful!');
+        this.loginService.toggleForm();
+        // Reset form
+        this.applyForm.reset();
       },
-      error: (error: any) => {
-        console.error('Error posting data', error);
-      },
-      complete: () => {
-        console.log('Signup request completed.');
-      },
+      error: (error: HttpErrorResponse) => {
+        this.errorService.handleError(error);
+        // Reset form
+        this.applyForm.reset();
+      }
     });
   }
 }

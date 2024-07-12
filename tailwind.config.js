@@ -9,7 +9,8 @@ module.exports = {
       colors: {
         peach: '#FFE6C9',
         darkPeach: '#73114B',
-        CustomGray: '#525252'
+        CustomGray: '#525252',
+        white: '#FFFFFF'
       },
       height : {
         300: '300px',
