@@ -9,6 +9,7 @@ import { NotificationService } from '../services/notification.service';
 import { HandleErrorService } from '../services/handle-error.service';
 import { Login } from '../interface/login';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'login',
@@ -17,7 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     CommonModule,
     NgOptimizedImage,
     SignupComponent,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -47,7 +48,8 @@ export class LoginComponent {
   constructor(private loginService: LoginService,
     private apiService: ApiService,
     private notificationService: NotificationService,
-    private errorService: HandleErrorService
+    private errorService: HandleErrorService,
+    private router : Router
   ) {
     this.isLogin$ = this.loginService.isLogin$;
   }
@@ -92,19 +94,19 @@ export class LoginComponent {
 
     this.apiService.login(this.data).subscribe({
       next: (response) => {
-        this.notificationService.showNotification('Login successful!');
         this.qrCodeUrl = response.qr_code_url
         // Reset form
         this.applyForm.reset();
-       
+        this.router.navigate(['/home']);
       },
       error: (error: HttpErrorResponse) => {
-        this.errorService.handleError(error);
+        
         if (error.error.detail.otp){
           this.otpRequired = error.error.detail.otp;
         }
         else{
           // Reset form
+        this.errorService.handleError(error);
         this.applyForm.reset();
         }
       },
