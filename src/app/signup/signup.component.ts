@@ -57,7 +57,9 @@ export class SignupComponent {
   }
 
   toggleForm() {
+    this.applyForm.reset()
     this.loginService.toggleForm();
+    
   }
 
   PasswordVisibility() {

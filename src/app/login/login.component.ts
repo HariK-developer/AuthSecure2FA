@@ -1,11 +1,15 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { SignupComponent } from '../signup/signup.component';
 import { Observable } from 'rxjs';
 import { LoginService } from '../services/login.service';
 import { ApiService } from '../services/api.service';
-import { NotificationService } from '../services/notification.service';
 import { HandleErrorService } from '../services/handle-error.service';
 import { Login } from '../interface/login';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -18,7 +22,7 @@ import { Router } from '@angular/router';
     CommonModule,
     NgOptimizedImage,
     SignupComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -28,7 +32,6 @@ export class LoginComponent {
   showValidationMessage = false;
   otpRequired = false;
   qrCodeUrl: string = '';
-
 
   applyForm = new FormGroup({
     username: new FormControl('', [
@@ -45,11 +48,11 @@ export class LoginComponent {
     password: '',
     otp: '',
   };
-  constructor(private loginService: LoginService,
+  constructor(
+    private loginService: LoginService,
     private apiService: ApiService,
-    private notificationService: NotificationService,
     private errorService: HandleErrorService,
-    private router : Router
+    private router: Router
   ) {
     this.isLogin$ = this.loginService.isLogin$;
   }
@@ -62,11 +65,12 @@ export class LoginComponent {
     return this.applyForm.get('password');
   }
 
-  get otp(){
+  get otp() {
     return this.applyForm.get('otp');
   }
 
   toggleForm() {
+    this.applyForm.reset();
     this.loginService.toggleForm();
   }
 
@@ -79,12 +83,11 @@ export class LoginComponent {
     if (this.applyForm.invalid) {
       // Display validation errors
       this.applyForm.markAllAsTouched();
-      
       this.showValidationMessage = true;
       setTimeout(() => {
         this.showValidationMessage = false;
       }, 3000);
-      return; 
+      return;
     }
 
     // Bind form data to the `data` object before making the API call
@@ -94,20 +97,23 @@ export class LoginComponent {
 
     this.apiService.login(this.data).subscribe({
       next: (response) => {
-        this.qrCodeUrl = response.qr_code_url
         // Reset form
+
         this.applyForm.reset();
-        this.router.navigate(['/home']);
+        if (response.qr_code_url) {
+          this.qrCodeUrl = response.qr_code_url;
+        } else {
+          this.loginService.setToken(response.access_token); // set the access token
+          this.router.navigate(['/home']);
+        }
       },
       error: (error: HttpErrorResponse) => {
-        
-        if (error.error.detail.otp){
+        if (error.error.detail.otp) {
           this.otpRequired = error.error.detail.otp;
-        }
-        else{
+        } else {
           // Reset form
-        this.errorService.handleError(error);
-        this.applyForm.reset();
+          this.errorService.handleError(error);
+          this.applyForm.reset();
         }
       },
       complete: () => {
